@@ -64,8 +64,11 @@ two-thirds of all wait calls were short polls that timed out.
 Every `spawn_agent` you issue — including when you are yourself a
 spawned child running a fan-out — sets `model` AND `reasoning_effort`
 explicitly, per the Model Selection rules of the skill you are
-executing. Setting `model` alone is a trap: the child's effort
-silently resets to that model's default, not to yours.
+executing. For a final whole-branch reviewer, set `model` to the model
+running the controller session; do not upgrade it to a more capable model.
+Choose `reasoning_effort` separately according to the role. Setting `model`
+alone is a trap: the child's effort silently resets to that model's default,
+not to yours.
 
 Ask your human partner to add a machine-level backstop to
 `~/.codex/config.toml` so any spawn that slips through still routes to
