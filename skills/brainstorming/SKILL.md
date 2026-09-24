@@ -240,6 +240,14 @@ is the whole process.
 
 - Write the validated design (spec) to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
   - (User preferences for spec location override this default)
+- When a written spec needs a diagram for architecture, component relationships, data flow, interactions, or state transitions, express it as a fenced Mermaid block. Use `flowchart` for architecture and data flow, `sequenceDiagram` for interactions, and `stateDiagram-v2` for lifecycle transitions. Keep the diagram consistent with component names in the prose, and include it when it makes relationships easier to understand than prose alone.
+  ```mermaid
+  flowchart LR
+      Client --> API
+      API --> Queue
+      Queue --> Worker
+      Worker --> Database
+  ```
 - Use elements-of-style:writing-clearly-and-concisely skill if available
 - Commit the design document to git
 
