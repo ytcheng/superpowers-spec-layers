@@ -1,7 +1,14 @@
 ---
 name: using-superpowers
-description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions
+description: Use when the human partner explicitly asks to activate Superpowers or invoke the using-superpowers skill
 ---
+
+<OPT-IN>
+This skill is inactive until your human partner explicitly asks to use
+Superpowers or this skill. Skill discovery or automatic session-start
+injection does not count as a request. If no such request has been made,
+ignore the instructions below. Once requested, apply them for this session.
+</OPT-IN>
 
 <SUBAGENT-STOP>
 If you were dispatched as a subagent to execute a specific task, ignore this skill.
