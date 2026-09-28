@@ -240,7 +240,7 @@ is the whole process.
 
 - Write the validated design (spec) to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
   - (User preferences for spec location override this default)
-- When a written spec needs a diagram for architecture, component relationships, data flow, interactions, or state transitions, express it as a fenced Mermaid block. Use `flowchart` for architecture and data flow, `sequenceDiagram` for interactions, and `stateDiagram-v2` for lifecycle transitions. Keep the diagram consistent with component names in the prose, and include it when it makes relationships easier to understand than prose alone.
+- When a written spec needs a diagram, choose a fenced format supported by the target reader and suited to the relationships being shown. Use Mermaid for architecture, data flow, straightforward interactions, and state transitions; PlantUML (`plantuml` or `puml`) for UML class/component models that need details such as visibility, inheritance, or multiplicity, and for detailed sequence interactions; and Graphviz (`dot` or `graphviz`) for graph layouts that need clusters, ranks, or explicit layout control. Keep diagram labels consistent with the prose, and include a diagram when it makes relationships easier to understand than prose alone.
   ```mermaid
   flowchart LR
       Client --> API
