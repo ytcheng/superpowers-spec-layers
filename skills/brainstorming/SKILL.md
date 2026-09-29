@@ -7,6 +7,10 @@ description: "You MUST use this before any creative work - creating features, bu
 
 Help turn ideas into fully formed designs and specs through natural collaborative dialogue.
 
+The Detailed Agent Spec is the existing technical/design spec. For the full
+design path, read [spec-contract.md](spec-contract.md): Human Spec, Agent Spec
+and implementation plan have distinct readers, content and authority.
+
 Start by classifying how much process the request needs, then work
 through your path: understand the context, refine the idea, present a
 design, and get your human partner's approval.
@@ -27,8 +31,8 @@ recognize and correct, grounded in what they want to accomplish.
    can assess. Separate what they said from assumptions. Invite correction
    and incorporate their answer before treating this as the design brief.
 3. **Carry intent into the design.** Preserve the agreed understanding in
-   the selected path's design artifact: the written spec for architectural
-   work, or the in-chat design/probe for bounded work and spikes. Check
+   the selected path's design artifact: the Human Spec and Agent Spec for
+   architectural work, or the in-chat design/probe for bounded work and spikes. Check
    proposed features and technical choices against that understanding.
 
 When the request already supplies the purpose and constraints, reflect
@@ -43,10 +47,12 @@ selected path's prerequisites:
 
 - Spike: the human partner approves the question and probe.
 - Bounded: the human partner approves the short in-chat design.
-- Architectural: the human partner reviews and approves the written spec,
-  then reviews the written implementation plan and selects its execution
-  method. Conversational design approval only permits writing the spec;
-  written-spec approval only permits invoking writing-plans.
+- Architectural: the human partner reviews and approves the Human Spec
+  before the Agent Spec is written, then reviews and approves the
+  Agent Spec before planning. They then review the written implementation
+  plan and select its execution method. Approval of a conversational outline
+  permits writing the Human Spec; Human Spec approval permits writing the
+  Agent Spec; Agent Spec approval permits invoking writing-plans.
 
 A reply approves the stage actually presented. Approval of an idea or
 feature scope does not approve artifacts that do not exist yet. Resume
@@ -69,7 +75,7 @@ override it:
   doc, no spec file. Report findings as a recommendation; anything you
   built stays labeled throwaway.
 - **Bounded** — a well-scoped change to code that already exists in
-  this repo: a new flag, a small endpoint, a one-file fix.
+  this repo: a label change or an isolated internal fix with no contract changes.
   Understanding the kind of app is not enough — bounded means the flow
   you are changing is already here to read. If there is no existing
   flow to change, the task is not bounded. Ask the clarifying
@@ -81,7 +87,11 @@ override it:
 - **Architectural** — new projects, new subsystems, changes that
   restructure how components fit together or alter interfaces others
   depend on. Follow the full process: questions, approaches, sectioned
-  design, written spec, then the writing-plans skill.
+  Human Spec with review, Agent Spec with review, then the writing-plans skill.
+
+Changes to database schema, API or permission contracts, or file/module
+boundaries take the architectural path even if they touch few files: those
+changes need a reviewable Human Spec.
 
 When in doubt between two paths, take the heavier one. The ratchet is
 one-way: hidden complexity discovered mid-task upgrades the path —
@@ -131,11 +141,12 @@ your path and complete them in order.
 2. **Offer the visual companion just-in-time** — NOT upfront. The first time a question would genuinely be clearer shown than described, offer it then (its own message); on approval its browser tab opens for you. If no visual question ever arises, never offer it. See the Visual Companion section below.
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
 4. **Propose 2-3 approaches** — with trade-offs and your recommendation
-5. **Present design** — in sections scaled to their complexity, get user approval after each section
-6. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
-7. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
-8. **User reviews written spec** — ask user to review the spec file before proceeding
-9. **Transition to implementation** — invoke writing-plans skill to create implementation plan
+5. **Write Human Spec** — present the reader-facing design described below; save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-human-spec.md`
+6. **Human Spec review** — check readability, scope, assumptions and observable acceptance criteria; link the file and get your human partner's approval
+7. **Write Agent Spec** — expand the approved Human Spec into `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit both documents
+8. **Spec self-review** — check consistency with the Human Spec as well as placeholders, contradictions, ambiguity and scope (see below)
+9. **User reviews Agent Spec** — ask user to review the spec file before proceeding
+10. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
 ## Process Flow
 
@@ -151,9 +162,10 @@ digraph brainstorming {
     "Explore project context" [shape=box];
     "Ask clarifying questions" [shape=box];
     "Propose 2-3 approaches" [shape=box];
-    "Present design sections" [shape=box];
-    "User approves design?" [shape=diamond];
-    "Write design doc" [shape=box];
+    "Write and self-review Human Spec" [shape=box];
+    "Human approves Human Spec?" [shape=diamond];
+    "Write Agent Spec" [shape=box];
+    "Changes approved intent?" [shape=diamond];
     "Spec self-review\n(fix inline)" [shape=box];
     "User reviews spec?" [shape=diamond];
     "Invoke writing-plans skill" [shape=doublecircle];
@@ -170,13 +182,15 @@ digraph brainstorming {
     "Hidden complexity? Upgrade path" -> "Classify: spike / bounded / architectural";
     "Explore project context" -> "Ask clarifying questions";
     "Ask clarifying questions" -> "Propose 2-3 approaches";
-    "Propose 2-3 approaches" -> "Present design sections";
-    "Present design sections" -> "User approves design?";
-    "User approves design?" -> "Present design sections" [label="no, revise"];
-    "User approves design?" -> "Write design doc" [label="yes"];
-    "Write design doc" -> "Spec self-review\n(fix inline)";
+    "Propose 2-3 approaches" -> "Write and self-review Human Spec";
+    "Write and self-review Human Spec" -> "Human approves Human Spec?";
+    "Human approves Human Spec?" -> "Write and self-review Human Spec" [label="no, revise"];
+    "Human approves Human Spec?" -> "Write Agent Spec" [label="yes"];
+    "Write Agent Spec" -> "Changes approved intent?";
+    "Changes approved intent?" -> "Write and self-review Human Spec" [label="yes, revise and confirm"];
+    "Changes approved intent?" -> "Spec self-review\n(fix inline)" [label="no"];
     "Spec self-review\n(fix inline)" -> "User reviews spec?";
-    "User reviews spec?" -> "Write design doc" [label="changes requested"];
+    "User reviews spec?" -> "Write Agent Spec" [label="changes requested"];
     "User reviews spec?" -> "Invoke writing-plans skill" [label="approved"];
 }
 ```
@@ -213,13 +227,25 @@ is the whole process.
 - Lead with your recommended option and explain why
 - YAGNI ruthlessly - remove unnecessary features from every approach and design
 
-**Presenting the design:**
+**Writing and presenting the Human Spec (architectural path):**
 
-- Once you believe you understand what you're building, present the design
-- Scale each section to its complexity: a few sentences if straightforward, up to 200-300 words if nuanced
-- Ask after each section whether it looks right so far
-- Cover: architecture, components, data flow, error handling, testing
-- Be ready to go back and clarify if something doesn't make sense
+**Required:** read [human-spec-guide.md](human-spec-guide.md) before writing.
+Aim for a correct mental model in 3–5 minutes: begin with a one-screen
+Executive Summary, then choose applicable sections. Use diagrams, trees,
+schema diffs, tables and checklists where they improve understanding.
+
+Human review includes exact schema changes and migration strategy, module
+structure and responsibilities, and changed API/permission contracts.
+These are reviewable decisions, not details to hide in the Agent Spec.
+The guide defines their required sections, diagram triggers and checks.
+Complete SQL, algorithms and handlers belong in the Agent Spec; ordered
+file edits, implementation/test code and commands belong in the plan.
+
+Save and self-review the Human Spec against the guide and agreed intent.
+Link it for your human partner, point out the decisions and compatibility
+impacts requiring attention, and resolve approval-relevant open questions.
+Obtain approval of this artifact before writing the Agent Spec. This replaces
+the conversational section-by-section design approval stage.
 
 **Design for isolation and clarity:**
 
@@ -238,18 +264,13 @@ is the whole process.
 
 **Documentation:**
 
-- Write the validated design (spec) to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
-  - (User preferences for spec location override this default)
-- When a written spec needs a diagram, choose a fenced format supported by the target reader and suited to the relationships being shown. Use Mermaid for architecture, data flow, straightforward interactions, and state transitions; PlantUML (`plantuml` or `puml`) for UML class/component models that need details such as visibility, inheritance, or multiplicity, and for detailed sequence interactions; and Graphviz (`dot` or `graphviz`) for graph layouts that need clusters, ranks, or explicit layout control. Keep diagram labels consistent with the prose, and include a diagram when it makes relationships easier to understand than prose alone.
-  ```mermaid
-  flowchart LR
-      Client --> API
-      API --> Queue
-      Queue --> Worker
-      Worker --> Database
-  ```
+- Expand the approved Human Spec into the Detailed Agent Spec at `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`, following [spec-contract.md](spec-contract.md). Link the approved source and its revision near the top.
+  - User preferences for document locations override the defaults for both specs.
+- Provide implementation-ready technical requirements: component interfaces, precise data models and constraints, API contracts and validation/error behavior, algorithms/state transitions, concurrency and failure/recovery behavior, migration/backfill/rollback mechanics, compatibility and technical test requirements, as applicable. Include full SQL when needed here or in the plan, with one authoritative location.
+- Map each Human Spec acceptance ID and important decision to the relevant technical sections. The Agent Spec elaborates the approved design; it does not replace it with different schema, contracts or boundaries. Changes to approved decisions follow the contract's revision/approval path.
+- Keep ordered tasks, exact code edits, test code and run commands in writing-plans. Preserve diagrams that clarify technical relationships; use the format-selection guidance in [human-spec-guide.md](human-spec-guide.md).
 - Use elements-of-style:writing-clearly-and-concisely skill if available
-- Commit the design document to git
+- Commit the Human Spec and Agent Spec to git
 
 **Spec Self-Review:**
 After writing the spec document, look at it with fresh eyes:
@@ -257,14 +278,17 @@ After writing the spec document, look at it with fresh eyes:
 1. **Placeholder scan:** Any "TBD", "TODO", incomplete sections, or vague requirements? Fix them.
 2. **Internal consistency:** Do any sections contradict each other? Does the architecture match the feature descriptions?
 3. **Scope check:** Is this focused enough for a single implementation plan, or does it need decomposition?
-4. **Ambiguity check:** Could any requirement be interpreted two different ways? If so, pick one and make it explicit.
+4. **Ambiguity check:** Resolve implementation ambiguity within the approved design; decisions that change the Human Spec return to its review before continuing.
+5. **Human Spec alignment:** Does the Agent Spec map every agreed acceptance ID, schema/API contract, module boundary, migration strategy and key decision? Resolve contradictions against the Human Spec; changes to agreed intent go through the Human Spec review above.
 
 Fix any issues inline. No need to re-review — just fix and move on.
 
-**User Review Gate:**
-After the spec review loop passes, ask the user to review the written spec before proceeding:
+**Agent Spec Review Gate:**
+After self-review, link both documents and ask your human partner to review
+the Agent Spec before proceeding. Lead with a short summary of technical
+choices and any approval-relevant impact; keep the full detail in the file:
 
-> "Spec written and committed to `<path>`. Please review it and let me know if you want to make any changes before we start writing out the implementation plan."
+> "Agent Spec written and committed to `<path>`, based on the approved Human Spec at `<human-spec-path>`. Please review it and let me know if you want to make any changes before we start writing out the implementation plan."
 
 Wait for the user's response. If they request changes, make them and re-run the spec review loop. Only proceed once the user approves.
 

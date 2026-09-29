@@ -14,7 +14,7 @@ Execute plan by dispatching a fresh implementer subagent per task, a task review
 **Narration:** between tool calls, narrate at most one short line — the
 ledger and the tool results carry the record.
 
-**Continuous execution:** Do not pause to check in with your human partner between tasks. Execute all tasks from the plan without stopping. The only reasons to stop are the four named below, or all tasks complete. "Should I continue?" prompts and progress summaries waste their time — they asked you to execute the plan, so execute it.
+**Continuous execution:** Do not pause to check in with your human partner between tasks. Execute all tasks within the approved design without stopping. Design changes follow the approval contract below; execution stops are the four named below, or all tasks complete. "Should I continue?" prompts and progress summaries waste their time — they asked you to execute the plan, so execute it.
 
 **Rulings, not stalls.** A running plan does not wait on a human. Conflicts,
 ambiguities, plan defects, a cap you would have asked to exceed — decide
@@ -24,7 +24,13 @@ judgment settles what neither answers. Record every decision in the ledger as
 going. A wrong ruling costs rework your human partner can see and undo; a
 session parked on a question costs their whole day and buys nothing.
 
-Four things stop you, and only these: an irreversible or destructive
+**Design authority:** read [the design artifact contract](../brainstorming/spec-contract.md).
+Rulings resolve implementation choices within the approved design. A change
+to approved Human Spec decisions returns to human review before affected
+work continues; record the impact and synchronize both specs and the plan.
+Continue independent work within the existing approval.
+
+Within the approved design, four things stop you: an irreversible or destructive
 operation; a security-sensitive action; a side effect outside this worktree
 that norms say you ask about first (a merge, a push to a shared branch, a
 publish); and a plan so broken that every path forward is a guess. For those,
@@ -153,11 +159,12 @@ a ledger file, not only in todos.
 - `git clean -fdx` will destroy the workspace (it's git-ignored scratch); if
   that happens, recover from `git log`.
 
-Read the plan once, note its context and Global Constraints, and create a
-todo per task. If the plan names a Spec, read that too: the spec is the
-authority the plan argues from, and conflicts inside the plan resolve
-against it. A plan with no reachable spec gets a ledger note saying so —
-rulings made without one are provisional.
+Read the plan once, its Human Spec and Agent Spec (`Spec` field), note Global
+Constraints and Acceptance Coverage, and create a todo per task. Resolve
+conflicts using the design contract: approved Human decisions govern,
+technical detail elaborates them, and the plan orders execution. Verify the
+source/approval references; retrieve missing sources before dependent work.
+An already approved legacy single-spec plan retains its existing source.
 
 Before dispatching Task 1, scan the plan once for conflicts, writing down
 what you checked as you check it:
@@ -270,6 +277,10 @@ and fix-round diffs need it.
   later dispatches — a real session's dispatch hit 42k chars of which 99%
   was pasted history. A fresh subagent needs its task, the interfaces it
   touches, and the global constraints. Nothing else.
+- The extracted brief includes the task's Requirements, acceptance IDs and
+  exact relevant constraints. Check these before dispatch; carry project-wide
+  constraints with the context. Keep source links available for discrepancies
+  without making every worker reread all design documents.
 - The dispatch carries the no-subagents contract (it is in the
   implementer template): the implementer never dispatches subagents —
   not helpers, and never a reviewer. Review arrives from you, after the
@@ -445,6 +456,11 @@ parked-with-ruling at the cap.
 
 ## Final Review
 
+Before final review, use superpowers:verification-before-completion to map
+Human acceptance and Agent Spec requirements to actual evidence. Include
+both spec paths and the plan's Acceptance Coverage with evidence/gaps in the
+review dispatch. Cross-task checks remain unverified until they actually run.
+
 The final whole-branch review gets a package too: run
 `bash scripts/review-package PLAN_FILE MERGE_BASE HEAD` (MERGE_BASE = the commit the
 branch started from, e.g. `git merge-base main HEAD`) and include the
@@ -465,7 +481,8 @@ Then run exactly one scoped re-review of the fix wave
 [re-review-prompt.md](re-review-prompt.md)).
 Adjudicate any residual findings as in the task loop's breaker: park with
 rulings, or rule on the load-bearing ones and ledger what you decided. Only
-the four classes above stop you here. There is no second fix wave —
+the four execution classes above stop you within the approved design;
+changes to approved Human decisions still follow the design contract. There is no second fix wave —
 residual load-bearing findings surface to your human partner when
 finishing-a-development-branch presents the options.
 

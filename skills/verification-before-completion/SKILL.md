@@ -47,6 +47,31 @@ Skip any step = lying, not verifying
 | Agent completed | VCS diff shows changes | Agent reports "success" |
 | Requirements met | Line-by-line checklist | Tests passing |
 
+## Verifying a layered design
+
+When the work has a Human Spec, read it alongside the Agent Spec and plan's
+Acceptance Coverage, following [the design artifact contract](../brainstorming/spec-contract.md).
+Verify the approved outcomes as well as implementation tests. For legacy
+single-spec or bounded work, use the agreed spec or in-chat acceptance criteria.
+
+Keep an evidence table: acceptance ID / requirement, test or check, actual
+result, evidence location, and **passed / failed / not verified**. Record the
+version and environment the evidence covers. Reuse applicable current test
+evidence; do not repeat tests merely to populate the table. Missing evidence
+is “not verified,” not a pass inferred from a green unit suite.
+
+For relevant changes, verify schema and constraints, historical-data/backfill
+results, migration order and availability assumptions, old/new compatibility,
+rollback including post-rollout writes, module boundaries, API contracts and
+permission behavior. Match the checks to the approved acceptance criteria;
+use isolated fixtures or rehearsal environments for migration checks.
+
+Before claiming the work complete, every required criterion has passing
+evidence. If some checks cannot run, report the precise unverified items and
+their reason, distinguish completed implementation from incomplete acceptance,
+and preserve them in the handoff. Changing acceptance requires human review
+of the design; silently removing an item is not verification.
+
 ## Red Flags - STOP
 
 - Using "should", "probably", "seems to"

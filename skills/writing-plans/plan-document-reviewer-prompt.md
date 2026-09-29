@@ -13,7 +13,10 @@ Subagent (general-purpose):
     You are a plan document reviewer. Verify this plan is complete and ready for implementation.
 
     **Plan to review:** [PLAN_FILE_PATH]
-    **Spec for reference:** [SPEC_FILE_PATH]
+    **Agent Spec for reference:** [SPEC_FILE_PATH]
+    **Human Spec for reference:** [HUMAN_SPEC_PATH and approved revision, or legacy single-spec context]
+
+    Read [the design artifact contract](../brainstorming/spec-contract.md).
 
     ## What to Check
 
@@ -21,6 +24,8 @@ Subagent (general-purpose):
     |----------|------------------|
     | Completeness | TODOs, placeholders, incomplete tasks, missing steps |
     | Spec Alignment | Plan covers spec requirements, no major scope creep |
+    | Human Acceptance | Every approved acceptance ID/decision maps through the Agent Spec to an owning task and verification; task Requirements carry the relevant constraints into extracted briefs |
+    | Change Safety | Applicable schema/backfill, migration order, rollback/new writes, compatibility, module boundaries and API/permission contracts agree with the Human Spec |
     | Task Decomposition | Tasks have clear boundaries, steps are actionable |
     | Buildability | Could an engineer follow this plan without getting stuck? |
 

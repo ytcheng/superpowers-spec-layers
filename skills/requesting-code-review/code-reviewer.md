@@ -20,6 +20,11 @@ Subagent (general-purpose):
 
     [PLAN_OR_REQUIREMENTS]
 
+    For layered designs, include the approved Human Spec, Agent Spec and
+    plan paths plus Acceptance Coverage and verification evidence/gaps.
+    Apply [the design artifact contract](../brainstorming/spec-contract.md):
+    technical or plan detail cannot silently override approved Human decisions.
+
     ## Git Range to Review
 
     **Base:** [BASE_SHA]
@@ -66,6 +71,10 @@ Subagent (general-purpose):
     - Does the implementation match the plan / requirements?
     - Are deviations justified improvements, or problematic departures?
     - Is all planned functionality present?
+    - Do schema, migration/rollback, module boundaries, API/permission behavior
+      and compatibility match the approved Human Spec, when applicable?
+    - Is every Human acceptance criterion covered by implementation and
+      evidence, with unverified outcomes reported rather than assumed?
 
     **Code quality:**
     - Clean separation of concerns?

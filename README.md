@@ -37,7 +37,7 @@ Superpowers is a complete software development methodology for your coding agent
 
 It starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. 
 
-Once it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. 
+For architectural work, it first writes a Human Spec organized for review: a short summary, useful diagrams, schema and API changes, module structure, key decisions and acceptance criteria. After your approval, it develops the Detailed Agent Spec. Small bounded changes keep a short in-chat design.
 
 After you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. 
 
@@ -306,11 +306,11 @@ Restart any active Muse sessions after installing so the `SessionStart` hook tak
 
 ## The Basic Workflow
 
-1. **brainstorming** - Activates before writing code. Refines rough ideas through questions, explores alternatives, presents design in sections for validation. Saves design document.
+1. **brainstorming** - Activates before writing code. Refines rough ideas through questions and explores alternatives. Architectural work produces a reviewable Human Spec (diagrams, schema/API changes, module structure and decisions), then a Detailed Agent Spec after approval. Small bounded work keeps its short in-chat design.
 
 2. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on new branch, runs project setup, verifies clean test baseline.
 
-3. **writing-plans** - Activates with approved design. Breaks work into bite-sized tasks (2-5 minutes each). Every task has exact file paths, complete code, verification steps.
+3. **writing-plans** - Activates with approved design. Maps Human Spec acceptance through the Agent Spec into bite-sized tasks (2-5 minutes each). Every task has exact requirements, file paths, complete code and verification steps.
 
 4. **subagent-driven-development** or **executing-plans** - Activates with plan. Either dispatches a fresh subagent per task with a review after each (most thorough), or implements every task inline in the current session with one fresh review of the whole branch at the end (cheapest).
 

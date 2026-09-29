@@ -36,7 +36,13 @@ as `Ruling: <what you decided> — <why> — <what it costs if wrong>`, and keep
 going. Deviating from the plan without a ledgered ruling is a decision made
 in secret.
 
-Four things stop you, and only these: an irreversible or destructive
+**Design authority:** read [the design artifact contract](../brainstorming/spec-contract.md).
+Rulings resolve implementation choices within the approved design. A change
+to approved Human Spec decisions returns to human review before affected
+work continues; record the impact and synchronize both specs and the plan.
+Continue independent work within the existing approval.
+
+Within the approved design, four things stop you: an irreversible or destructive
 operation; a security-sensitive action; a side effect outside this worktree
 that norms say you ask about first (a merge, a push to a shared branch, a
 publish); and a plan so broken that every path forward is a guess. For
@@ -140,11 +146,12 @@ and the new one resumes from the same ledger.
 - `git clean -fdx` will destroy the workspace (it's git-ignored scratch);
   if that happens, recover from `git log`.
 
-Read the plan once, note its context and Global Constraints, and create a
-todo per task. If the plan names a Spec, read that too: the spec is the
-authority the plan argues from, and conflicts inside the plan resolve
-against it. A plan with no reachable spec gets a ledger note saying so —
-rulings made without one are provisional.
+Read the plan once, its Human Spec and Agent Spec (`Spec` field), note Global
+Constraints and Acceptance Coverage, and create a todo per task. Resolve
+conflicts using the design contract: approved Human decisions govern,
+technical detail elaborates them, and the plan orders execution. Verify the
+source/approval references; retrieve missing sources before dependent work.
+An already approved legacy single-spec plan retains its existing source.
 
 **REQUIRED SUB-SKILL:** load superpowers:test-driven-development now,
 before Task 1. It governs every step of every task below; a plan whose
@@ -215,6 +222,8 @@ in this session — not inferred from the diff looking right:
   it writes the command and result into the ledger line.
 - Every `Expected:` line in the brief was compared against real output.
 - Every deviation from the brief has a `Ruling:` line in the ledger.
+- Task Requirements and mapped Human acceptance criteria have corresponding
+  evidence; cross-task acceptance checks remain explicitly pending until run.
 
 **REQUIRED SUB-SKILL:** superpowers:verification-before-completion governs
 the claim. If any item is missing, the task is not complete: finish it.
@@ -241,7 +250,8 @@ Run `../subagent-driven-development/scripts/review-package PLAN_FILE MERGE_BASE 
 session executing this plan, using
 superpowers:requesting-code-review's
 [code-reviewer.md](../requesting-code-review/code-reviewer.md), with the
-package path, the plan and spec paths, the plan's Review Focus section
+package path, the plan and both spec paths, Acceptance Coverage and its
+evidence/gaps, the plan's Review Focus section
 verbatim if it has one (the input classes and failure modes the plan's
 tests do not exercise — the reviewer checks each deliberately), and a
 pointer to the ledger's `Ruling:` lines so it can weigh the calls you
@@ -312,7 +322,7 @@ Use superpowers:finishing-a-development-branch.
 | "I'll run the full suite at the end instead of per step" | Per-step runs are how you learn which step broke it. The end-of-task run is the contract, not a substitute. |
 | "The plan is wrong here, I'll just do the right thing" | Do the right thing and ledger the ruling. Unledgered deviation is a decision made in secret. |
 | "I'll write the ledger lines after a few tasks" | Compaction does not wait for a convenient moment. One line per task, in the same message as the commit. |
-| "Let me check in before the next task" | They chose inline to spend less. Progress prompts spend their time instead. Only the four stops stop you. |
+| "Let me check in before the next task" | They chose inline to spend less. Progress prompts spend their time instead. Within the approved design, only the four execution stops apply. |
 | "I read my own diff carefully; the final reviewer is redundant" | Same author, same blind spots. The reviewer is the only fresh context this run buys. |
 | "Tests should pass, the change was trivial" | "Should" is not evidence. The contract requires the command and its output. |
 | "Subagents are slow and expensive, I'll skip the final review too" | Inline already removed the per-task reviewers. One review of the whole branch is the floor, not the ceiling. |

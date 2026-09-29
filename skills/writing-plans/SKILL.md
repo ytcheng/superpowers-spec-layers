@@ -20,11 +20,18 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 ## Scope Check
 
+**Required:** read [the design artifact contract](../brainstorming/spec-contract.md).
+For new architectural work, read the approved Human Spec and its Detailed
+Agent Spec before planning. Human Spec approval is required before either
+detailed specification or planning; use brainstorming for a missing design
+stage. Preserve the existing Agent Spec review gate. Legacy approved plans
+and bounded changes follow the compatibility rules in the contract.
+
 If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
 
 ## File Structure
 
-Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
+Before defining tasks, map out which files will be created or modified and what each one is responsible for. Refine the approved Human Spec's module tree and Agent Spec boundaries into exact files; a new boundary or responsibility change returns to Human Spec review under the contract.
 
 - Design units with clear boundaries and well-defined interfaces. Each file should have one clear responsibility.
 - You reason best about code you can hold in context at once, and your edits are more reliable when files are focused. Prefer smaller, focused files over large ones that do too much.
@@ -66,8 +73,17 @@ independently testable deliverable.
 
 **Tech Stack:** [Key technologies/libraries]
 
-**Spec:** [path to the spec/design doc this plan implements — the plan
-argues from the spec, so the spec travels with it; executors read both]
+**Human Spec:** [path and approved revision/reference; for a legacy
+single-spec plan, state that explicitly rather than inventing a document]
+
+**Spec:** [path to the Detailed Agent Spec — retain this field name for
+existing tooling; include its reviewed revision/reference]
+
+## Acceptance Coverage
+
+| Human acceptance / decision | Agent Spec section | Task(s) | Verification and expected result |
+|----------------------------|--------------------|---------|----------------------------------|
+| [stable ID and requirement] | [section reference] | [owners] | [test/check and observable outcome] |
 
 ## Global Constraints
 
@@ -95,6 +111,11 @@ owns the code, in that task's own step style.]
 
 ````markdown
 ### Task N: [Component Name]
+
+**Requirements:** [Human Spec acceptance IDs and Agent Spec sections this
+task satisfies, with the exact task-relevant constraints and outcomes.
+Include migration/rollback, API or permission obligations when applicable;
+the extracted task brief must carry them without requiring the entire plan.]
 
 **Files:**
 - Create: `exact/path/to/file.py`
@@ -154,7 +175,7 @@ Every step must contain the actual content an engineer needs. These are **plan f
 
 After writing the complete plan, look at the spec with fresh eyes and check the plan against it. This is a checklist you run yourself — not a subagent dispatch.
 
-**1. Spec coverage:** Skim each section/requirement in the spec. Can you point to a task that implements it? List any gaps.
+**1. Spec coverage:** Check both specs and the Acceptance Coverage table. Every human acceptance criterion and approved decision must map to an Agent Spec section, an owning task and verification. Include schema constraints, backfill, online/downtime assumptions, compatibility windows, rollback preserving new writes, module boundaries and API/permission changes when applicable. Put executable checks in the owning tasks; a coverage table alone is not a test. Preserve exact approved values in task Requirements so extraction cannot lose them.
 
 **2. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
 
@@ -167,7 +188,9 @@ If you find issues, fix them inline. No need to re-review — just fix and move 
 ## Execution Handoff
 
 After saving and self-reviewing the plan, link it for your human partner
-to read. If they have already explicitly supplied an execution method, ask
+to read. Lead with a short review summary of task order, acceptance coverage,
+migration/compatibility risks and decisions requiring attention; keep execution
+detail in the plan. If they have already explicitly supplied an execution method, ask
 them to review the plan and confirm it captures what they want; wait for that
 review before implementation, then use the preserved method. Otherwise, ask
 them to review the plan and choose an execution method before implementation.
