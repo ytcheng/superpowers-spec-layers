@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Validate the native Antigravity plugin: the Marketplace manifest, the skill
-# opt-in prompt and skill gate, and the repo layout agy depends on. CI-safe;
-# when `agy` is on PATH, also runs `agy plugin validate`.
+# description agy relies on to bootstrap using-superpowers, and the repo layout
+# agy depends on. CI-safe; when `agy` is on PATH, also runs `agy plugin validate`.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -48,8 +48,6 @@ if not isinstance(prompts, list) or not 1 <= len(prompts) <= 3:
     fail("suggestedPrompts must be a list of 1-3 prompts")
 if not all(isinstance(p, str) and p.strip() for p in prompts):
     fail("suggestedPrompts entries must be non-empty strings")
-if not all(p.lower().startswith("activate superpowers") for p in prompts):
-    fail("every suggestedPrompt must explicitly activate Superpowers")
 
 claude_manifest = json.loads(
     (root / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
@@ -77,14 +75,14 @@ if not any(entry.get("path") == ".antigravity-plugin/plugin.json"
            for entry in version_config.get("files", [])):
     fail(".version-bump.json does not register .antigravity-plugin/plugin.json")
 
-# --- Opt-in: this fork requires an explicit user request before bootstrap.
+# --- Bootstrap: agy lists each skill's description, and using-superpowers'
+# description is what gets the model to load it at the start of a session.
 skill_md = (root / "skills" / "using-superpowers" / "SKILL.md").read_text(encoding="utf-8")
 frontmatter = re.match(r"---\n(.*?)\n---\n", skill_md, re.DOTALL)
 description = frontmatter and re.search(r"^description:(.*)$", frontmatter.group(1), re.MULTILINE)
-if not description or "explicitly asks to activate Superpowers" not in description.group(1):
-    fail("using-superpowers description must require explicit activation")
-if "<OPT-IN>" not in skill_md:
-    fail("using-superpowers opt-in guard is missing")
+if not description or "Use when starting any conversation" not in description.group(1):
+    fail("using-superpowers description no longer says 'Use when starting any "
+         "conversation'; Antigravity relies on it to bootstrap")
 
 # --- Layout agy depends on -------------------------------------------------
 # A root plugin.json would be read instead of .antigravity-plugin/plugin.json,

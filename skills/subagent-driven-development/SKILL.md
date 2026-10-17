@@ -14,7 +14,7 @@ Execute plan by dispatching a fresh implementer subagent per task, a task review
 **Narration:** between tool calls, narrate at most one short line — the
 ledger and the tool results carry the record.
 
-**Continuous execution:** Do not pause to check in with your human partner between tasks. Execute all tasks within the approved design without stopping. Design changes follow the approval contract below; execution stops are the four named below, or all tasks complete. "Should I continue?" prompts and progress summaries waste their time — they asked you to execute the plan, so execute it.
+**Continuous execution:** Do not pause to check in with your human partner between tasks. Execute all tasks from the plan without stopping. The only reasons to stop are the four named below, or all tasks complete. "Should I continue?" prompts and progress summaries waste their time — they asked you to execute the plan, so execute it.
 
 **Rulings, not stalls.** A running plan does not wait on a human. Conflicts,
 ambiguities, plan defects, a cap you would have asked to exceed — decide
@@ -24,11 +24,11 @@ judgment settles what neither answers. Record every decision in the ledger as
 going. A wrong ruling costs rework your human partner can see and undo; a
 session parked on a question costs their whole day and buys nothing.
 
-**Design authority:** read [the design artifact contract](../brainstorming/spec-contract.md).
-Rulings resolve implementation choices within the approved design. A change
-to approved Human Spec decisions returns to human review before affected
-work continues; record the impact and synchronize both specs and the plan.
-Continue independent work within the existing approval.
+Rulings settle implementation choices within the approved spec. If a
+proposed ruling changes approved behavior, database structure, architecture,
+workflow, interfaces, permissions, or rollout and rollback, revise the
+single spec and obtain human approval before the affected work. Continue
+independent work that stays within the approved design.
 
 Within the approved design, four things stop you: an irreversible or destructive
 operation; a security-sensitive action; a side effect outside this worktree
@@ -159,12 +159,10 @@ a ledger file, not only in todos.
 - `git clean -fdx` will destroy the workspace (it's git-ignored scratch); if
   that happens, recover from `git log`.
 
-Read the plan once, its Human Spec and Agent Spec (`Spec` field), note Global
-Constraints and Acceptance Coverage, and create a todo per task. Resolve
-conflicts using the design contract: approved Human decisions govern,
-technical detail elaborates them, and the plan orders execution. Verify the
-source/approval references; retrieve missing sources before dependent work.
-An already approved legacy single-spec plan retains its existing source.
+Read the plan once, its approved Spec, Global Constraints, and Acceptance
+Coverage, then create a todo per task. The single spec is the authority the
+plan argues from; resolve conflicts against it. Retrieve a missing spec
+before dependent work rather than inventing its decisions.
 
 Before dispatching Task 1, scan the plan once for conflicts, writing down
 what you checked as you check it:
@@ -199,24 +197,23 @@ Use the least powerful model that can handle each role to conserve cost and incr
 **Architecture and design implementation tasks**: use the most capable
 available model.
 
-**Task-scoped review tasks**: choose the model with the same judgment, scaled
-to the diff's size, complexity, and risk. A small mechanical diff does not
-need the most capable model; a subtle concurrency change does. Scoped
-re-reviews of small fix diffs take a cheap-to-mid tier. The final whole-branch
-review follows its separate controller-session model rule below.
+**Review tasks**: use the same model as the controller session for every
+task-scoped spec review, code-quality review, scoped re-review, and final
+whole-branch review. A fresh context provides independence without changing
+the model tier.
 
 **Fix-loop escalation (rounds 4-5)**: use a model at least one tier above
 the implementer that got stuck.
 
 **Specify the model explicitly when the harness exposes model selection.**
-For a final whole-branch reviewer, set it to the controller session's model;
-do not promote it to a more capable tier. For other subagents, use the model
-selected for that role above.
+For every review subagent, set it to the controller session's model. For
+implementers and fixers, use the model selected for their role above.
 
 **Turn count beats token price.** Wall-clock and context cost scale with how
 many turns a subagent takes, and the cheapest models routinely take 2-3× the
 turns on multi-step work — costing more overall. Use a mid-tier model as the
-floor for reviewers and for implementers working from prose descriptions.
+floor for implementers working from prose descriptions. Reviewers still use
+the controller session's model.
 When the task's plan text contains the complete code to write, the
 implementation is transcription plus testing: use the cheapest tier for
 that implementer. Single-file mechanical fixes also take the cheapest tier.
@@ -277,10 +274,10 @@ and fix-round diffs need it.
   later dispatches — a real session's dispatch hit 42k chars of which 99%
   was pasted history. A fresh subagent needs its task, the interfaces it
   touches, and the global constraints. Nothing else.
-- The extracted brief includes the task's Requirements, acceptance IDs and
-  exact relevant constraints. Check these before dispatch; carry project-wide
-  constraints with the context. Keep source links available for discrepancies
-  without making every worker reread all design documents.
+- Check that the extracted brief includes the task's Requirements, spec
+  acceptance IDs, and exact relevant constraints. Carry project-wide
+  constraints separately. Resolve a missing approved decision against the
+  single spec before dispatching the task.
 - The dispatch carries the no-subagents contract (it is in the
   implementer template): the implementer never dispatches subagents —
   not helpers, and never a reviewer. Review arrives from you, after the
@@ -457,16 +454,16 @@ parked-with-ruling at the cap.
 ## Final Review
 
 Before final review, use superpowers:verification-before-completion to map
-Human acceptance and Agent Spec requirements to actual evidence. Include
-both spec paths and the plan's Acceptance Coverage with evidence/gaps in the
-review dispatch. Cross-task checks remain unverified until they actually run.
+the approved spec's acceptance criteria to actual evidence. Include the
+single spec path and the plan's Acceptance Coverage with evidence or gaps
+in the review dispatch. Cross-task checks remain unverified until run.
 
 The final whole-branch review gets a package too: run
 `bash scripts/review-package PLAN_FILE MERGE_BASE HEAD` (MERGE_BASE = the commit the
 branch started from, e.g. `git merge-base main HEAD`) and include the
 printed path in the final review dispatch, so the final reviewer reads
 one file instead of re-deriving the branch diff with git commands. Dispatch
-on the same model as the controller session, using
+on the same model as the controller session (see Model Selection), using
 superpowers:requesting-code-review's
 [code-reviewer.md](../requesting-code-review/code-reviewer.md). Point it at
 the ledger's deferred-minor and parked lines so it can triage which must be
@@ -481,8 +478,7 @@ Then run exactly one scoped re-review of the fix wave
 [re-review-prompt.md](re-review-prompt.md)).
 Adjudicate any residual findings as in the task loop's breaker: park with
 rulings, or rule on the load-bearing ones and ledger what you decided. Only
-the four execution classes above stop you within the approved design;
-changes to approved Human decisions still follow the design contract. There is no second fix wave —
+the four classes above stop you here. There is no second fix wave —
 residual load-bearing findings surface to your human partner when
 finishing-a-development-branch presents the options.
 

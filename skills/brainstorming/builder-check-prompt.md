@@ -16,6 +16,13 @@ this well: places where you'd have to guess and a wrong guess would
 matter. For each, give the question and why the answer changes the plan.
 Rank them by importance.
 
+For software designs, report any unexplained term or abbreviation that
+makes the opening or a consequential database, architecture, workflow, or
+permission decision hard for a non-specialist reviewer to understand.
+Point to the phrase and say what plain-language explanation is missing.
+The design is also the human partner's approval document, so these
+decisions must be understandable without another spec.
+
 Skip anything the document explicitly leaves to the builder, and anything
 you could reasonably decide yourself. Skip nitpicks about wording.
 

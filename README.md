@@ -2,6 +2,11 @@
 
 Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.
 
+This fork tracks upstream v7.0.0. Its design and review changes apply when
+running this checkout. Marketplace entries and install commands below that
+name `obra/superpowers` install upstream; use this fork's repository URL or
+checkout to get its changes.
+
 ## Table of Contents
 
 - [How it works](#how-it-works)
@@ -35,15 +40,15 @@ Superpowers is a complete software development methodology for your coding agent
 
 ## How it works
 
-Once you ask your coding agent to activate Superpowers, it steps back to understand what you're trying to build before writing code.
+It starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do.
 
-For architectural work, it first writes a Human Spec organized for review: a short summary, useful diagrams, schema and API changes, module structure, key decisions and acceptance criteria. After your approval, it develops the Detailed Agent Spec. Small bounded changes keep a short in-chat design.
+Once it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. For a software project, it writes one design document for both your approval and implementation planning. It explains the reason for the change in plain language, then shows any database, architecture, workflow, interface, and permission changes with the technical detail needed to build them.
 
 After you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. 
 
 Next up, once you say "go", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for your agent to work autonomously for a couple hours at a time without deviating from the plan you put together.
 
-This fork's `using-superpowers` bootstrap is opt-in: ask your agent to activate Superpowers for the session.
+There's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.
 
 ## Commercial Services
 
@@ -89,9 +94,9 @@ Install Superpowers as a plugin from this repository:
 agy plugin install https://github.com/ytcheng/superpowers-spec-layers
 ```
 
-After installation, say "Activate Superpowers" or use one of the plugin's
-suggested prompts. The `using-superpowers` skill in this fork requires that
-explicit request. Reinstall with the same command to update.
+Antigravity lists each installed skill's description, and the description of
+the `using-superpowers` skill prompts the model to load that skill at the start
+of a conversation. Reinstall with the same command to update.
 
 ### Codex App
 
@@ -280,7 +285,7 @@ turn loses the bootstrap — start a fresh session if skills stop triggering.
 
 ### Muse
 
-Superpowers is available as a native Muse plugin. The `using-superpowers` bootstrap is injected via the native `SessionStart` hook alongside Claude Code, Codex, Cursor, Gemini, Pi, and the rest. In this fork, its instructions take effect after you explicitly ask to activate Superpowers.
+Superpowers is available as a native Muse plugin — same repo, same skills, all harnesses. The `using-superpowers` bootstrap is injected via the native `SessionStart` hook alongside Claude Code, Codex, Cursor, Gemini, Pi, and the rest — no per-session opt-in.
 
 - Install from a local checkout:
 
@@ -303,17 +308,17 @@ Superpowers is available as a native Muse plugin. The `using-superpowers` bootst
   muse plugins update superpowers
   ```
 
-Restart any active Muse sessions after installing so the `SessionStart` hook takes effect; hooks require approval on first install. To use this fork's bootstrap, start a fresh session and ask to activate Superpowers. Version is tracked in `.version-bump.json` so `scripts/bump-version.sh` keeps it in sync.
+Restart any active Muse sessions after installing so the `SessionStart` hook takes effect — skills are active immediately, hooks require approval on first install. To verify, start a fresh session and send `Let's make a react todo list` — a working install auto-triggers `brainstorming` before any code is written. Version is tracked in `.version-bump.json` so `scripts/bump-version.sh` keeps it in sync.
 
 ## The Basic Workflow
 
-1. **brainstorming** - Activates before writing code. Refines rough ideas through questions and explores alternatives. Architectural work produces a reviewable Human Spec (diagrams, schema/API changes, module structure and decisions), then a Detailed Agent Spec after approval. Small bounded work keeps its short in-chat design.
+1. **brainstorming** - Activates before building anything. Draws out what you actually want, and why, through questions that get you describing it, then plays its understanding back for correction. Small changes get agreed in chat; projects get one reviewable design document that a builder can plan from.
 
 2. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on new branch, runs project setup, verifies clean test baseline.
 
-3. **writing-plans** - Activates with approved design. Maps Human Spec acceptance through the Agent Spec into bite-sized tasks (2-5 minutes each). Every task has exact requirements, file paths, complete code and verification steps.
+3. **writing-plans** - Activates with approved design. Maps the design's acceptance criteria to tasks with exact file paths, interfaces, test expectations, and verification steps.
 
-4. **subagent-driven-development** or **executing-plans** - Activates with plan. Either dispatches a fresh subagent per task with a review after each (most thorough), or implements every task inline in the current session with one fresh review of the whole branch at the end (cheapest).
+4. **subagent-driven-development** or **executing-plans** - Activates with plan. Either dispatches a fresh subagent per task with a review after each (most thorough), or implements every task inline in the current session with one fresh review of the whole branch at the end (cheapest). Plan-execution review subagents use the same model as the session running the plan.
 
 5. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Deletes code written before tests.
 

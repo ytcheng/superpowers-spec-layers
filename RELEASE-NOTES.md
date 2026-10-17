@@ -1,6 +1,13 @@
 # Superpowers Release Notes
 
-> Fork integration note (2026-10-17): This fork retains its Human Spec → Detailed Agent Spec approval flow and opt-in `using-superpowers` bootstrap. The v7.0.0 Brainstorming and automatic Antigravity bootstrap changes described below are upstream release notes and are not active in this fork.
+## Fork changes on v7.0.0
+
+- Kept upstream skill activation and its single design document. The design
+  now explains context and terms for human review while specifying applicable
+  database, architecture, workflow, interface, permission, and rollout changes.
+- Plan-execution review subagents use the controller session's model.
+
+The upstream release history follows.
 
 ## v7.0.0 (2026-10-09)
 
