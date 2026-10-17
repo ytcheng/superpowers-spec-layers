@@ -7,7 +7,7 @@ description: Use when you have a spec or requirements for a multi-step task, bef
 
 ## Overview
 
-Write implementation plans for an engineer who has not seen this codebase or this spec. Assume they write idiomatic code in the project's language once they know the exact interface and the exact test, and that they will make a reasonable choice wherever the plan leaves one open. What they cannot know is what you decided: which files, which names and signatures, which values from the spec, which tests prove each task. Document those. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
+Write implementation plans for an engineer who has not seen this codebase or this spec. Assume they write idiomatic code in the project's language once they know the exact interface and the exact test, and that they will make a reasonable choice wherever the plan leaves one open. What they cannot know is what you decided: which files, which names and signatures, which values from the spec, which tests prove each task. Document those. Use a small number of coherent tasks, with test cycles and commits inside each task. DRY. YAGNI. TDD. Frequent commits.
 
 **Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
 
@@ -33,12 +33,27 @@ This structure informs the task decomposition. Each task should produce self-con
 
 ## Task Right-Sizing
 
-A task is the smallest unit that carries its own test cycle and is worth a
-fresh reviewer's gate. When drawing task boundaries: fold setup,
-configuration, scaffolding, and documentation steps into the task whose
-deliverable needs them; split only where a reviewer could meaningfully
-reject one task while approving its neighbor. Each task ends with an
-independently testable deliverable.
+Start from the spec's outcomes, not files, components, or technical layers.
+Choose the fewest tasks that each deliver a coherent, independently
+verifiable behavior or a required rollout checkpoint. A task may span the
+database, service, API, and UI; it may contain several red-green test cycles
+and commits. Fold setup, configuration, scaffolding, and documentation into
+the task whose outcome needs them. A file, helper, migration, or test being
+reviewable by itself does not make it a task.
+
+Split when the outcomes can be accepted independently, a migration must be
+deployed and checked before dependent behavior, or the combined change is
+too broad for one fresh implementer and reviewer to handle well. Before
+keeping a boundary, ask: if the later task were rejected, would the earlier
+one still deliver an approved behavior or necessary safety checkpoint? If
+not, merge them. Keep unrelated outcomes separate even when merging would
+reduce the task count.
+
+For example, an order cancellation feature usually groups the status
+constraint, cancellation rule, and API endpoint in one task, with the order
+page as another task if its user flow needs its own review. Make the schema
+migration a separate task only when rollout requires an independently
+verified deployment step.
 
 ## Step Granularity
 
@@ -98,7 +113,7 @@ owns the code, in that task's own step style.]
 ## Task Structure
 
 ````markdown
-### Task N: [Component Name]
+### Task N: [Outcome or Required Rollout Checkpoint]
 
 **Requirements:** [Spec acceptance IDs and the exact constraints this task
 must preserve, including database, rollout, rollback, interface, or
@@ -183,7 +198,9 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 **4. Review Focus:** For each input class or failure mode the spec implies, is there a task whose tests exercise it? The five uncovered ones most likely to bite a person go in the Review Focus section, and each line there gets its test added to the owning task. An empty section means you checked and found none, not that you skipped the check.
 
-**5. Proportion:** Compare the plan's length to the spec's. A plan several times longer than the spec it implements is a transcript of the program, not a plan. If code blocks are most of the document, replace bodies with signatures, test names and assertions, and check that each step is still unambiguous.
+**5. Task boundaries:** Scan adjacent tasks for a file, layer, helper, setup step, or test made into its own deliverable. Merge tasks that only make sense together or share the same acceptance evidence. Keep a separate task only for an independently approved outcome, a necessary rollout checkpoint, or a change too broad for one focused implementation and review.
+
+**6. Proportion:** Compare the plan's length to the spec's. A plan several times longer than the spec it implements is a transcript of the program, not a plan. If code blocks are most of the document, replace bodies with signatures, test names and assertions, and check that each step is still unambiguous.
 
 If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
 
