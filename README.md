@@ -35,7 +35,7 @@ Superpowers is a complete software development methodology for your coding agent
 
 ## How it works
 
-It starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. 
+Once you ask your coding agent to activate Superpowers, it steps back to understand what you're trying to build before writing code.
 
 For architectural work, it first writes a Human Spec organized for review: a short summary, useful diagrams, schema and API changes, module structure, key decisions and acceptance criteria. After your approval, it develops the Detailed Agent Spec. Small bounded changes keep a short in-chat design.
 
@@ -43,7 +43,7 @@ After you've signed off on the design, your agent puts together an implementatio
 
 Next up, once you say "go", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for your agent to work autonomously for a couple hours at a time without deviating from the plan you put together.
 
-There's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.
+This fork's `using-superpowers` bootstrap is opt-in: ask your agent to activate Superpowers for the session.
 
 ## Commercial Services
 
@@ -86,11 +86,12 @@ The Superpowers marketplace provides Superpowers and some other related plugins 
 Install Superpowers as a plugin from this repository:
 
 ```bash
-agy plugin install https://github.com/obra/superpowers
+agy plugin install https://github.com/ytcheng/superpowers-spec-layers
 ```
 
-Antigravity runs the plugin's session-start hook, so Superpowers is active from
-the first message. Reinstall with the same command to update.
+After installation, say "Activate Superpowers" or use one of the plugin's
+suggested prompts. The `using-superpowers` skill in this fork requires that
+explicit request. Reinstall with the same command to update.
 
 ### Codex App
 
@@ -279,7 +280,7 @@ turn loses the bootstrap — start a fresh session if skills stop triggering.
 
 ### Muse
 
-Superpowers is available as a native Muse plugin — same repo, same skills, all harnesses. The `using-superpowers` bootstrap is injected via the native `SessionStart` hook alongside Claude Code, Codex, Cursor, Gemini, Pi, and the rest — no per-session opt-in.
+Superpowers is available as a native Muse plugin. The `using-superpowers` bootstrap is injected via the native `SessionStart` hook alongside Claude Code, Codex, Cursor, Gemini, Pi, and the rest. In this fork, its instructions take effect after you explicitly ask to activate Superpowers.
 
 - Install from a local checkout:
 
@@ -302,7 +303,7 @@ Superpowers is available as a native Muse plugin — same repo, same skills, all
   muse plugins update superpowers
   ```
 
-Restart any active Muse sessions after installing so the `SessionStart` hook takes effect — skills are active immediately, hooks require approval on first install. To verify, start a fresh session and send `Let's make a react todo list` — a working install auto-triggers `brainstorming` before any code is written. Version is tracked in `.version-bump.json` so `scripts/bump-version.sh` keeps it in sync.
+Restart any active Muse sessions after installing so the `SessionStart` hook takes effect; hooks require approval on first install. To use this fork's bootstrap, start a fresh session and ask to activate Superpowers. Version is tracked in `.version-bump.json` so `scripts/bump-version.sh` keeps it in sync.
 
 ## The Basic Workflow
 
@@ -349,7 +350,7 @@ Superpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of t
 - **diagnosing-superpowers** - Work out what went wrong in a session, with evidence; export a scrubbed bundle or file an issue
 
 **Collaboration** 
-- **brainstorming** - Socratic design refinement
+- **brainstorming** - Drawing out intent before building
 - **writing-plans** - Detailed implementation plans
 - **executing-plans** - Inline plan execution: one context, one final review
 - **dispatching-parallel-agents** - Concurrent subagent workflows
