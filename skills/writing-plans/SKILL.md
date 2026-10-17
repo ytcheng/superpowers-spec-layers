@@ -64,6 +64,10 @@ verified deployment step.
 - "Run the tests and make sure they pass" - step
 - "Commit" - step
 
+A task that spans several behaviors repeats this red-green sequence for
+each behavior. Do not collect all failing tests up front, implement several
+parts, and run the first green check only at the end.
+
 ## Plan Document Header
 
 **Every plan MUST start with this header:**
@@ -115,6 +119,15 @@ owns the code, in that task's own step style.]
 ````markdown
 ### Task N: [Outcome or Required Rollout Checkpoint]
 
+**Outcome:** [One observable result this task delivers when complete. Say
+who can do what, or what rollout condition becomes safe. Do not describe
+only a file or internal component.]
+
+**Boundary:** [The behavior and cross-layer changes this task owns; name
+the adjacent behavior left to another task when the handoff could be
+confused. State a required predecessor or preserved behavior only when it
+changes what the implementer may do. Do not repeat the file list.]
+
 **Requirements:** [Spec acceptance IDs and the exact constraints this task
 must preserve, including database, rollout, rollback, interface, or
 permission behavior when relevant. The extracted task brief must stand on
@@ -163,6 +176,13 @@ git commit -m "feat: add specific feature"
 ```
 ````
 
+The task heading and Outcome tell the implementer what success looks like;
+Boundary says where this task stops; Requirements pins the exact approved
+promises. Files, Interfaces, and Steps then say how to deliver and check it.
+Keep these fields short and specific. Name deferred work only when a worker
+or reviewer could otherwise mistake it for part of this task. A task brief
+must make sense on its own after extraction from the plan.
+
 ## What a Step Contains
 
 A step is done when the implementer can write exactly one reasonable thing
@@ -200,7 +220,9 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 **5. Task boundaries:** Scan adjacent tasks for a file, layer, helper, setup step, or test made into its own deliverable. Merge tasks that only make sense together or share the same acceptance evidence. Keep a separate task only for an independently approved outcome, a necessary rollout checkpoint, or a change too broad for one focused implementation and review.
 
-**6. Proportion:** Compare the plan's length to the spec's. A plan several times longer than the spec it implements is a transcript of the program, not a plan. If code blocks are most of the document, replace bodies with signatures, test names and assertions, and check that each step is still unambiguous.
+**6. Task clarity:** Read each task without the surrounding plan. Can you state its observable outcome, the work it owns and defers, and the approved requirements that make it complete? If its title or file list is doing all that work, rewrite Outcome and Boundary. Make sure deferred behavior has an owning later task and that the verification steps prove this task's outcome.
+
+**7. Proportion:** Compare the plan's length to the spec's. A plan several times longer than the spec it implements is a transcript of the program, not a plan. If code blocks are most of the document, replace bodies with signatures, test names and assertions, and check that each step is still unambiguous.
 
 If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
 

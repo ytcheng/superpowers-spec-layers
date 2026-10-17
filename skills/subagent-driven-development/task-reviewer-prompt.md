@@ -94,6 +94,10 @@ Subagent (general-purpose):
 
     Compare the diff against What Was Requested:
 
+    - Does it deliver the task's stated Outcome within its Boundary? Work
+      expressly assigned to a later task is not missing from this diff;
+      work beyond this task's boundary is extra.
+
     - **Missing:** requirements they skipped, missed, or claimed without
       implementing
     - **Extra:** features that weren't requested, over-engineering, unneeded

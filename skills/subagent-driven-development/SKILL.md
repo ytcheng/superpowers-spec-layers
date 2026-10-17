@@ -274,10 +274,13 @@ and fix-round diffs need it.
   later dispatches — a real session's dispatch hit 42k chars of which 99%
   was pasted history. A fresh subagent needs its task, the interfaces it
   touches, and the global constraints. Nothing else.
-- Check that the extracted brief includes the task's Requirements, spec
-  acceptance IDs, and exact relevant constraints. Carry project-wide
-  constraints separately. Resolve a missing approved decision against the
-  single spec before dispatching the task.
+- Check that the extracted brief makes its outcome and boundary clear,
+  whether or not an older plan labels them, and includes Requirements,
+  spec acceptance IDs, and exact relevant constraints. Carry project-wide
+  constraints separately. If the outcome or handoff is unclear, fix the
+  plan against the approved spec and regenerate the brief before dispatching.
+  Resolve a missing approved decision against the single spec rather than
+  guessing.
 - The dispatch carries the no-subagents contract (it is in the
   implementer template): the implementer never dispatches subagents —
   not helpers, and never a reviewer. Review arrives from you, after the
